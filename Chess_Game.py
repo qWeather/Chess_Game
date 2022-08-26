@@ -1,5 +1,5 @@
-# Avoid jumping pieces 
-# Killing conditions 
+# Avoid jumping pieces
+# Killing conditions
 # Checkmate
 
 
@@ -223,12 +223,12 @@ def check_jumping_p2(current_piece_pos, next_piece_pos, turn):
 
     for i in row_values:
         if not is_occupied(i, turn):
-            print("There is a piece in the way at pos:", i)
+            print("\033[91m\nThere is a piece in the way at position:\033[0m\n", i)
             return False
 
     for i in col_values:
         if not is_occupied(i, turn):
-            print("There is a piece in the way at pos:", i)
+            print("\033[91m\nThere is a piece in the way at position:\033[0m\n", i)
             return False
     return True
 
@@ -239,11 +239,11 @@ def rules(piece_name, current_piece_pos, next_piece_pos, turn):
     if not piece_name.startswith('knight'):
         if next_turn:
             if not (check_jumping_p1(current_piece_pos, next_piece_pos, turn)):
-                print("There is a piece in the way (func:rules)")
+                print("\033[91m\nThere is a piece in the way!\033[0m\n")
                 return False
         else:
             if not (check_jumping_p2(current_piece_pos, next_piece_pos, turn)):
-                print("There is a piece in the way (func:rules)")
+                print("\033[91m\nThere is a piece in the way!\033[0m\n")
                 return False
 
     # check if the next position is occupied
@@ -316,6 +316,7 @@ while game:
     #  update the values_1, values_2, and board at end of each turn
     if next_turn:
         print("\033[95m\nPink's Turn\033[0m")
+
         piece = input("\033[95m\nWhat piece would you like to move: \033[0m")
         if piece == "pawn":
             pawn = input("\033[95m\nWhich pawn (1 to 8) would you like to move: \033[0m")
@@ -354,6 +355,7 @@ while game:
 
     else:
         print("\033[93m\nYellow's Turn\033[0m")
+
         piece = input("\033[93m\nWhat piece would you like to move: \033[0m")
         if piece == "pawn":
             pawn = input("\033[93m\nWhich pawn (1 to 8) would you like to move: \033[0m")
