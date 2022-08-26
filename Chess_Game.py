@@ -1,8 +1,3 @@
-# Killing conditions
-# Checkmate
-
-
-# width for the spaces
 width = 2
 #  dictionary containing all the pieces
 pieces = {
@@ -88,7 +83,8 @@ def display_and_update(pos_values_1, pos_values_2):
                     print("\033[95m", pieces['king'], "\033[0m", end='\t')
                 elif key_checker == {"queen"}:
                     print("\033[95m", pieces['queen'], "\033[0m", end='\t')
-                elif key_checker == {"pawn_1"} or key_checker == {"pawn_2"} or key_checker == {"pawn_3"} or key_checker == {"pawn_4"} or key_checker == {
+                elif key_checker == {"pawn_1"} or key_checker == {"pawn_2"} or key_checker == {
+                    "pawn_3"} or key_checker == {"pawn_4"} or key_checker == {
                     "pawn_5"} or key_checker == {"pawn_6"} or key_checker == {"pawn_7"} or key_checker == {"pawn_8"}:
                     print("\033[95m", pieces['pawn'], "\033[0m", end='\t')
                 if c % 8 == 0:
@@ -107,7 +103,8 @@ def display_and_update(pos_values_1, pos_values_2):
                     print("\033[93m", pieces['king'], "\033[0m", end='\t')
                 elif key_checker == {"queen"}:
                     print("\033[93m", pieces['queen'], "\033[0m", end='\t')
-                elif key_checker == {"pawn_1"} or key_checker == {"pawn_2"} or key_checker == {"pawn_3"} or key_checker == {"pawn_4"} or key_checker == {
+                elif key_checker == {"pawn_1"} or key_checker == {"pawn_2"} or key_checker == {
+                    "pawn_3"} or key_checker == {"pawn_4"} or key_checker == {
                     "pawn_5"} or key_checker == {"pawn_6"} or key_checker == {"pawn_7"} or key_checker == {"pawn_8"}:
                     print("\033[93m", pieces['pawn'], "\033[0m", end='\t')
                 if c % 8 == 0:
@@ -149,12 +146,12 @@ def is_occupied(pos, turn):
     if turn:
         for key in dict_move_p1.keys():
             if pos == dict_move_p1[key]:
-                print("\033[91m\nThe position you want to move to is already occupied!\033[0m\n")
+                # print("\033[91m\nThe position you want to move to is already occupied!\033[0m\n")
                 return False
     else:
         for key in dict_move_p2.keys():
             if pos == dict_move_p2[key]:
-                print("\033[91m\nThe position you want to move to is already occupied!\033[0m\n")
+                # print("\033[91m\nThe position you want to move to is already occupied!\033[0m\n")
                 return False
     return True
 
@@ -178,7 +175,6 @@ def check_jumping_p1(current_piece_pos, next_piece_pos, turn):
     row_values = []
     for i in row_diff_list:
         row_values.append((i, current_piece_pos[1]))
-    print(row_values)
 
     col_values = []
     for i in col_diff_list:
@@ -214,7 +210,6 @@ def check_jumping_p2(current_piece_pos, next_piece_pos, turn):
     row_values = []
     for i in row_diff_list:
         row_values.append((i, current_piece_pos[1]))
-    print(row_values)
 
     col_values = []
     for i in col_diff_list:
@@ -235,7 +230,7 @@ def check_jumping_p2(current_piece_pos, next_piece_pos, turn):
 # function to set the rules of the chess game
 def rules(piece_name, current_piece_pos, next_piece_pos, turn):
     # if knight -> jump over other pieces is allowed
-    if not piece_name.startswith('knight'):
+    if not (piece_name.startswith('knight') or piece_name.startswith('bishop') or piece_name.startswith('queen')):
         if turn:
             if not (check_jumping_p1(current_piece_pos, next_piece_pos, turn)):
                 print("\033[91m\nThere is a piece in the way!\033[0m\n")
