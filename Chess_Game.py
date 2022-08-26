@@ -1,4 +1,3 @@
-# Avoid jumping pieces
 # Killing conditions
 # Checkmate
 
@@ -36,7 +35,7 @@ dict_move_p1 = {
     "bishop_r": (1, 6),
     "king": (1, 5),
     "queen": (1, 4),
-    "pawn_1": (4, 1),  # !!!
+    "pawn_1": (2, 1),
     "pawn_2": (2, 2),
     "pawn_3": (2, 3),
     "pawn_4": (2, 4),
@@ -55,7 +54,7 @@ dict_move_p2 = {
     "bishop_r": (8, 6),
     "king": (8, 5),
     "queen": (8, 4),
-    "pawn_1": (5, 1),  # !!!
+    "pawn_1": (7, 1),
     "pawn_2": (7, 2),
     "pawn_3": (7, 3),
     "pawn_4": (7, 4),
@@ -77,39 +76,39 @@ def display_and_update(pos_values_1, pos_values_2):
         for c in range(1, 9):
 
             if (r, c) in pos_values_1:
-                key = {i for i in dict_move_p1 if dict_move_p1[i] == (r, c)}
+                key_checker = {i for i in dict_move_p1 if dict_move_p1[i] == (r, c)}
 
-                if key == {"rook_l"} or key == {"rook_r"}:
+                if key_checker == {"rook_l"} or key_checker == {"rook_r"}:
                     print("\033[95m", pieces['rook'], "\033[0m", end='\t')
-                elif key == {"knight_l"} or key == {"knight_r"}:
+                elif key_checker == {"knight_l"} or key_checker == {"knight_r"}:
                     print("\033[95m", pieces['knight'], "\033[0m", end='\t')
-                elif key == {"bishop_l"} or key == {"bishop_r"}:
+                elif key_checker == {"bishop_l"} or key_checker == {"bishop_r"}:
                     print("\033[95m", pieces['bishop'], "\033[0m", end='\t')
-                elif key == {"king"}:
+                elif key_checker == {"king"}:
                     print("\033[95m", pieces['king'], "\033[0m", end='\t')
-                elif key == {"queen"}:
+                elif key_checker == {"queen"}:
                     print("\033[95m", pieces['queen'], "\033[0m", end='\t')
-                elif key == {"pawn_1"} or key == {"pawn_2"} or key == {"pawn_3"} or key == {"pawn_4"} or key == {
-                    "pawn_5"} or key == {"pawn_6"} or key == {"pawn_7"} or key == {"pawn_8"}:
+                elif key_checker == {"pawn_1"} or key_checker == {"pawn_2"} or key_checker == {"pawn_3"} or key_checker == {"pawn_4"} or key_checker == {
+                    "pawn_5"} or key_checker == {"pawn_6"} or key_checker == {"pawn_7"} or key_checker == {"pawn_8"}:
                     print("\033[95m", pieces['pawn'], "\033[0m", end='\t')
                 if c % 8 == 0:
                     print("\n")
 
             elif (r, c) in pos_values_2:
-                key = {i for i in dict_move_p2 if dict_move_p2[i] == (r, c)}
+                key_checker = {i for i in dict_move_p2 if dict_move_p2[i] == (r, c)}
 
-                if key == {"rook_l"} or key == {"rook_r"}:
+                if key_checker == {"rook_l"} or key_checker == {"rook_r"}:
                     print("\033[93m", pieces['rook'], "\033[0m", end='\t')
-                elif key == {"knight_l"} or key == {"knight_r"}:
+                elif key_checker == {"knight_l"} or key_checker == {"knight_r"}:
                     print("\033[93m", pieces['knight'], "\033[0m", end='\t')
-                elif key == {"bishop_l"} or key == {"bishop_r"}:
+                elif key_checker == {"bishop_l"} or key_checker == {"bishop_r"}:
                     print("\033[93m", pieces['bishop'], "\033[0m", end='\t')
-                elif key == {"king"}:
+                elif key_checker == {"king"}:
                     print("\033[93m", pieces['king'], "\033[0m", end='\t')
-                elif key == {"queen"}:
+                elif key_checker == {"queen"}:
                     print("\033[93m", pieces['queen'], "\033[0m", end='\t')
-                elif key == {"pawn_1"} or key == {"pawn_2"} or key == {"pawn_3"} or key == {"pawn_4"} or key == {
-                    "pawn_5"} or key == {"pawn_6"} or key == {"pawn_7"} or key == {"pawn_8"}:
+                elif key_checker == {"pawn_1"} or key_checker == {"pawn_2"} or key_checker == {"pawn_3"} or key_checker == {"pawn_4"} or key_checker == {
+                    "pawn_5"} or key_checker == {"pawn_6"} or key_checker == {"pawn_7"} or key_checker == {"pawn_8"}:
                     print("\033[93m", pieces['pawn'], "\033[0m", end='\t')
                 if c % 8 == 0:
                     print("\n")
@@ -121,22 +120,22 @@ def display_and_update(pos_values_1, pos_values_2):
                     else:
                         print("\033[93m", pieces['checker'], "\033[0m", end='\n' * width)
                 else:
-                    if c % width == 0:
+                    if c % 2 == 0:
                         print("\033[95m", pieces['checker'], "\033[0m", end='\n' * width)
                     else:
                         print("\033[93m", pieces['checker'], "\033[0m", end='\n' * width)
 
             else:
-                if r % width == 1:
+                if r % 2 == 1:
                     if c % 2 == 1:
-                        print("\033[93m", pieces['checker'], "\033[0m", end=' ' * 5)
-                    else:
                         print("\033[95m", pieces['checker'], "\033[0m", end=' ' * 5)
+                    else:
+                        print("\033[93m", pieces['checker'], "\033[0m", end=' ' * 5)
                 else:
-                    if c % width == 0:
-                        print("\033[93m", pieces['checker'], "\033[0m", end=' ' * 5)
-                    else:
+                    if c % 2 == 0:
                         print("\033[95m", pieces['checker'], "\033[0m", end=' ' * 5)
+                    else:
+                        print("\033[93m", pieces['checker'], "\033[0m", end=' ' * 5)
     for letter in positions.keys():
         print("\033[91m", letter, "\033[0m", end=' ' * 5)
     print()
@@ -237,7 +236,7 @@ def check_jumping_p2(current_piece_pos, next_piece_pos, turn):
 def rules(piece_name, current_piece_pos, next_piece_pos, turn):
     # if knight -> jump over other pieces is allowed
     if not piece_name.startswith('knight'):
-        if next_turn:
+        if turn:
             if not (check_jumping_p1(current_piece_pos, next_piece_pos, turn)):
                 print("\033[91m\nThere is a piece in the way!\033[0m\n")
                 return False
