@@ -1,5 +1,4 @@
-# Avoid jumping pieces
-# Killing conditions 
+# Killing conditions
 # Checkmate
 
 
@@ -155,7 +154,7 @@ def display_and_update(pos_values_1, pos_values_2):
                     else:
                         print("\033[95m", pieces['checker'], "\033[0m", end='\t' * width)
     for letter in positions.keys():
-        print("\033[92m", letter, "\033[0m", end='\t' * width)
+        print("\033[91m", letter, "\033[0m", end='\t' * width)
     print()
 
 
@@ -170,47 +169,44 @@ def is_occupied(pos):
     # checking for both players
     for key in dict_move_p1.keys():
         if pos == dict_move_p1[key]:
-            print("\033[93m\nThe position you want to move to is already occupied!\033[0m\n")
+            print("\033[91m\nThe position you want to move to is already occupied!\033[0m\n")
             return False
     for key in dict_move_p2.keys():
         if pos == dict_move_p2[key]:
-            print("\033[93m\nThe position you want to move to is already occupied!\033[0m\n")
+            print("\033[91m\nThe position you want to move to is already occupied!\033[0m\n")
             return False
     return True
 
 
-
 # function to set the rules of the chess game
 def rules(piece_name, current_piece_pos, next_piece_pos):
-    # if the piece is any of the 8 pawns
     # check if the next position is occupied
-    # move only one space forward
+    # if piece is pawn move only one space forward
+    # if piece is rook move forward/backward/left/right if not outside boundaries
+    # if piece is bishop move on the diagonal if not outside boundaries
+    # if piece is knight move in the shape of L up/down/left/right
+    # if piece is king move forward/backward/left/right/diagonal only one space
+    # if piece is queen move forward/backward/left/right/diagonal if not outside boundaries
     if piece_name.startswith('pawn'):
         if abs(next_piece_pos[0] - current_piece_pos[0]) == 1 and is_occupied(next_piece_pos):
             return True
         else:
             return False
-    # if the piece is any of the 2 rooks
-    # check if the next position is occupied
-    # move forward/backward/left/right if not outside boundaries
+
     if piece_name.startswith('rook'):
         if (next_piece_pos[0] == current_piece_pos[0] or \
             next_piece_pos[1] == current_piece_pos[1]) and is_occupied(next_piece_pos):
             return True
         else:
             return False
-    # if the piece is any of the 2 bishops
-    # check if the next position is occupied
-    # move on the diagonal if not outside boundaries
+
     if piece_name.startswith('bishop'):
         if (next_piece_pos[0] != current_piece_pos[0] and \
             next_piece_pos[1] != current_piece_pos[1]) and is_occupied(next_piece_pos):
             return True
         else:
             return False
-    # if the piece is any of the 2 knights
-    # check if the next position is occupied
-    # move in the shape of L up/down/left/right
+
     if piece_name.startswith('knight'):
         if ((abs(next_piece_pos[0] - current_piece_pos[0]) == 1 and abs(
                 next_piece_pos[1] - current_piece_pos[1])) == 2) or \
@@ -220,18 +216,14 @@ def rules(piece_name, current_piece_pos, next_piece_pos):
             return True
         else:
             return False
-    # if the piece is the king
-    # check if the next position is occupied
-    # move forward/backward/left/right/diagonal only one space
+
     if piece_name.startswith('king'):
         if ((next_piece_pos[0] - current_piece_pos[0] == 1) or \
             (next_piece_pos[1] - current_piece_pos[1] == 1)) and is_occupied(next_piece_pos):
             return True
         else:
             return False
-    # if the piece is the queen
-    # check if the next position is occupied
-    # move forward/backward/left/right/diagonal if not outside boundaries
+
     if piece_name.startswith('queen'):
         if ((next_piece_pos[0] != current_piece_pos[0] and next_piece_pos[1] != current_piece_pos[1]) or \
             (next_piece_pos[0] == current_piece_pos[0] or next_piece_pos[1] == current_piece_pos[1])) and is_occupied(
@@ -289,16 +281,16 @@ while game:
         print("\033[93m\nBlack's Turn\033[0m")
         piece = input("\033[93m\nWhat piece would you like to move: \033[0m")
         if piece == "pawn":
-            pawn = input("\033[95m\nWhich pawn (1 to 8) would you like to move: \033[0m")
+            pawn = input("\033[93m\nWhich pawn (1 to 8) would you like to move: \033[0m")
             piece += "_" + pawn
         elif piece == "rook":
-            rook = input("\033[95m\nWhich rook (l or r) would you like to move: \033[0m")
+            rook = input("\033[93m\nWhich rook (l or r) would you like to move: \033[0m")
             piece += "_" + rook
         elif piece == "bishop":
-            bishop = input("\033[95m\nWhich bishop (l or r) would you like to move: \033[0m")
+            bishop = input("\033[93m\nWhich bishop (l or r) would you like to move: \033[0m")
             piece += "_" + bishop
         elif piece == "knight":
-            knight = input("\033[95m\nWhich knight (l or r) would you like to move: \033[0m")
+            knight = input("\033[93m\nWhich knight (l or r) would you like to move: \033[0m")
             piece += "_" + knight
         curr_pos = dict_move_p2[piece]
         print(f"\033[93m\nCurrent position is {curr_pos}.\033[0m")
@@ -323,7 +315,7 @@ while game:
             dict_move_p2[piece] = next_pos
             next_turn = True
     else:
-        print("\033[93m\nPiece doesn't exist or the position you tried to move to is invalid!\033[0m\n")
+        print("\033[91m\nPiece doesn't exist or the position you tried to move to is invalid!\033[0m\n")
 
     values_1 = list(dict_move_p1.values())
     values_2 = list(dict_move_p2.values())
