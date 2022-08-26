@@ -1,15 +1,6 @@
-# Avoid jumping pieces 
-# A5 instead of name -> A5 -> (1,5) -> piece_name
+# Avoid jumping pieces
 # Killing conditions 
 # Checkmate
-import re
-
-position = 'A1'
-
-match = re.match(r"([a-z]+)([0-9]+)", position, re.I)
-if match:
-    items = match.groups()
-print(items)
 
 
 # width for the spaces
@@ -188,6 +179,7 @@ def is_occupied(pos):
     return True
 
 
+
 # function to set the rules of the chess game
 def rules(piece_name, current_piece_pos, next_piece_pos):
     # if the piece is any of the 8 pawns
@@ -282,7 +274,10 @@ while game:
         curr_pos = dict_move_p1[piece]
         print(f"\033[95m\nCurrent position is {curr_pos}.\033[0m")
 
-        pos2, pos1 = input("\033[95m\nWhere would you like to move: \033[0m").split()
+        poses = input("\033[95m\nWhere would you like to move: \033[0m").capitalize()
+        poses = poses.strip(' ')
+        pos1 = poses[-1]
+        pos2 = poses[0]
         print()
 
         for key, value in positions.items():
@@ -308,7 +303,10 @@ while game:
         curr_pos = dict_move_p2[piece]
         print(f"\033[93m\nCurrent position is {curr_pos}.\033[0m")
 
-        pos2, pos1 = input("\033[93m\nWhere would you like to move: \033[0m").split()
+        poses = input("\033[93m\nWhere would you like to move: \033[0m").capitalize()
+        poses = poses.strip(' ')
+        pos1 = poses[-1]
+        pos2 = poses[0]
         print()
 
         for key, value in positions.items():
