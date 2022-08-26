@@ -1,4 +1,5 @@
-# Killing conditions
+# Avoid jumping pieces 
+# Killing conditions 
 # Checkmate
 
 
@@ -35,7 +36,7 @@ dict_move_p1 = {
     "bishop_r": (1, 6),
     "king": (1, 5),
     "queen": (1, 4),
-    "pawn_1": (2, 1),
+    "pawn_1": (4, 1),  # !!!
     "pawn_2": (2, 2),
     "pawn_3": (2, 3),
     "pawn_4": (2, 4),
@@ -54,7 +55,7 @@ dict_move_p2 = {
     "bishop_r": (8, 6),
     "king": (8, 5),
     "queen": (8, 4),
-    "pawn_1": (7, 1),
+    "pawn_1": (5, 1),  # !!!
     "pawn_2": (7, 2),
     "pawn_3": (7, 3),
     "pawn_4": (7, 4),
@@ -64,23 +65,6 @@ dict_move_p2 = {
     "pawn_8": (7, 8)
 }
 
-
-# rook = (1,8) 1,8 --> 8,8  pawn = (6,8)  1,8 --> 5,8 7,8 is empty curr position 6,8 is occcupied curr_pos(rook) < curr_pos(pawn)
-
-
-# (1,8) -> (8,8) -----> (2,8) , (3,8) , (4,8) ... (8,8)  ----> input these tuples into is_occupied()
-
-
-# rook at (1,8); we want to move to (4,8) and there is pawn at (2,8)
-#  curr_pos[0] - next_pos[0] > 0 (in this case diff of rows 4 - 1 = 3)  
-# diff_rows = 3
-
-# for i in range(diff_rows):
-# curr_pos[0] = curr_pos[0] + 1 
-# if is_occupied(curr_pos[0]):
-#     ...
-
-# curr_pos[1] - next_pos[1] > 0 (in this case diff of columns = 0 coz 8 - 8 = 0)
 
 #  function to display and update the board
 def display_and_update(pos_values_1, pos_values_2):
@@ -145,41 +129,123 @@ def display_and_update(pos_values_1, pos_values_2):
             else:
                 if r % width == 1:
                     if c % 2 == 1:
-                        print("\033[93m", pieces['checker'], "\033[0m", end='\t' * width)
+                        print("\033[93m", pieces['checker'], "\033[0m", end=' ' * 5)
                     else:
-                        print("\033[95m", pieces['checker'], "\033[0m", end='\t' * width)
+                        print("\033[95m", pieces['checker'], "\033[0m", end=' ' * 5)
                 else:
                     if c % width == 0:
-                        print("\033[93m", pieces['checker'], "\033[0m", end='\t' * width)
+                        print("\033[93m", pieces['checker'], "\033[0m", end=' ' * 5)
                     else:
-                        print("\033[95m", pieces['checker'], "\033[0m", end='\t' * width)
+                        print("\033[95m", pieces['checker'], "\033[0m", end=' ' * 5)
     for letter in positions.keys():
-        print("\033[91m", letter, "\033[0m", end='\t' * width)
+        print("\033[91m", letter, "\033[0m", end=' ' * 5)
     print()
 
 
-def player_input():
-    pass
-
-
 # function to check if the next position the player wants to move to is occupied or not
-def is_occupied(pos):
+def is_occupied(pos, turn):
     # search the player_1 dictionary of pieces for the key
     # check if key has same value as the next position and don't let it move if True
     # checking for both players
-    for key in dict_move_p1.keys():
-        if pos == dict_move_p1[key]:
-            print("\033[91m\nThe position you want to move to is already occupied!\033[0m\n")
+    if turn:
+        for key in dict_move_p1.keys():
+            if pos == dict_move_p1[key]:
+                print("\033[91m\nThe position you want to move to is already occupied!\033[0m\n")
+                return False
+    else:
+        for key in dict_move_p2.keys():
+            if pos == dict_move_p2[key]:
+                print("\033[91m\nThe position you want to move to is already occupied!\033[0m\n")
+                return False
+    return True
+
+
+def check_jumping_p1(current_piece_pos, next_piece_pos, turn):
+    # whites
+    row_diff = abs(next_piece_pos[0] - current_piece_pos[0])
+    col_diff = abs(next_piece_pos[1] - current_piece_pos[1])
+
+    row_diff_list = []
+    col_diff_list = []
+
+    if row_diff > 0:
+        for i in range(1, row_diff + 1):
+            row_diff_list.append(current_piece_pos[0] + i)
+
+    if col_diff > 0:
+        for i in range(1, col_diff + 1):
+            col_diff_list.append(current_piece_pos[1] + i)
+
+    row_values = []
+    for i in row_diff_list:
+        row_values.append((i, current_piece_pos[1]))
+    print(row_values)
+
+    col_values = []
+    for i in col_diff_list:
+        col_values.append((current_piece_pos[0], i))
+
+    for i in row_values:
+        if not is_occupied(i, turn):
+            print("\033[91m\nThere is a piece in the way at position:\033[0m\n", i)
             return False
-    for key in dict_move_p2.keys():
-        if pos == dict_move_p2[key]:
-            print("\033[91m\nThe position you want to move to is already occupied!\033[0m\n")
+
+    for i in col_values:
+        if not is_occupied(i, turn):
+            print("\033[91m\nThere is a piece in the way at position:\033[0m\n", i)
+            return False
+    return True
+
+
+def check_jumping_p2(current_piece_pos, next_piece_pos, turn):
+    row_diff = abs(next_piece_pos[0] - current_piece_pos[0])
+    col_diff = abs(next_piece_pos[1] - current_piece_pos[1])
+
+    row_diff_list = []
+    col_diff_list = []
+
+    if row_diff > 0:
+        for i in range(1, row_diff + 1):
+            row_diff_list.append(current_piece_pos[0] - i)
+
+    if col_diff > 0:
+        for i in range(1, col_diff + 1):
+            col_diff_list.append(current_piece_pos[1] - i)
+
+    row_values = []
+    for i in row_diff_list:
+        row_values.append((i, current_piece_pos[1]))
+    print(row_values)
+
+    col_values = []
+    for i in col_diff_list:
+        col_values.append((current_piece_pos[0], i))
+
+    for i in row_values:
+        if not is_occupied(i, turn):
+            print("There is a piece in the way at pos:", i)
+            return False
+
+    for i in col_values:
+        if not is_occupied(i, turn):
+            print("There is a piece in the way at pos:", i)
             return False
     return True
 
 
 # function to set the rules of the chess game
-def rules(piece_name, current_piece_pos, next_piece_pos):
+def rules(piece_name, current_piece_pos, next_piece_pos, turn):
+    # if knight -> jump over other pieces is allowed
+    if not piece_name.startswith('knight'):
+        if next_turn:
+            if not (check_jumping_p1(current_piece_pos, next_piece_pos, turn)):
+                print("There is a piece in the way (func:rules)")
+                return False
+        else:
+            if not (check_jumping_p2(current_piece_pos, next_piece_pos, turn)):
+                print("There is a piece in the way (func:rules)")
+                return False
+
     # check if the next position is occupied
     # if piece is pawn move only one space forward
     # if piece is rook move forward/backward/left/right if not outside boundaries
@@ -188,21 +254,21 @@ def rules(piece_name, current_piece_pos, next_piece_pos):
     # if piece is king move forward/backward/left/right/diagonal only one space
     # if piece is queen move forward/backward/left/right/diagonal if not outside boundaries
     if piece_name.startswith('pawn'):
-        if abs(next_piece_pos[0] - current_piece_pos[0]) == 1 and is_occupied(next_piece_pos):
+        if abs(next_piece_pos[0] - current_piece_pos[0]) == 1 and is_occupied(next_piece_pos, turn):
             return True
         else:
             return False
 
     if piece_name.startswith('rook'):
         if (next_piece_pos[0] == current_piece_pos[0] or \
-            next_piece_pos[1] == current_piece_pos[1]) and is_occupied(next_piece_pos):
+            next_piece_pos[1] == current_piece_pos[1]) and is_occupied(next_piece_pos, turn):
             return True
         else:
             return False
 
     if piece_name.startswith('bishop'):
         if (next_piece_pos[0] != current_piece_pos[0] and \
-            next_piece_pos[1] != current_piece_pos[1]) and is_occupied(next_piece_pos):
+            next_piece_pos[1] != current_piece_pos[1]) and is_occupied(next_piece_pos, turn):
             return True
         else:
             return False
@@ -212,22 +278,22 @@ def rules(piece_name, current_piece_pos, next_piece_pos):
                 next_piece_pos[1] - current_piece_pos[1])) == 2) or \
                 ((abs(next_piece_pos[0] - current_piece_pos[0]) == 2 and abs(
                     next_piece_pos[1] - current_piece_pos[1])) == 1) and \
-                is_occupied(next_piece_pos):
+                is_occupied(next_piece_pos, turn):
             return True
         else:
             return False
 
     if piece_name.startswith('king'):
         if ((next_piece_pos[0] - current_piece_pos[0] == 1) or \
-            (next_piece_pos[1] - current_piece_pos[1] == 1)) and is_occupied(next_piece_pos):
+            (next_piece_pos[1] - current_piece_pos[1] == 1)) and is_occupied(next_piece_pos, turn):
             return True
         else:
             return False
 
     if piece_name.startswith('queen'):
         if ((next_piece_pos[0] != current_piece_pos[0] and next_piece_pos[1] != current_piece_pos[1]) or \
-            (next_piece_pos[0] == current_piece_pos[0] or next_piece_pos[1] == current_piece_pos[1])) and is_occupied(
-            next_piece_pos):
+            (next_piece_pos[0] == current_piece_pos[0] or next_piece_pos[1] == current_piece_pos[1])) and \
+                is_occupied(next_piece_pos, turn):
             return True
         else:
             return False
@@ -249,7 +315,7 @@ while game:
     #  check that the rules are met by calling the function and update dictionary with new position
     #  update the values_1, values_2, and board at end of each turn
     if next_turn:
-        print("\033[95m\nWhite's Turn\033[0m")
+        print("\033[95m\nPink's Turn\033[0m")
         piece = input("\033[95m\nWhat piece would you like to move: \033[0m")
         if piece == "pawn":
             pawn = input("\033[95m\nWhich pawn (1 to 8) would you like to move: \033[0m")
@@ -277,8 +343,17 @@ while game:
                 pos2 = value
 
         next_pos = (int(pos1), int(pos2))
+
+        # true when there is NO piece
+        if check_jumping_p1(curr_pos, next_pos, next_turn):
+            # overtake as player_1
+            key = {i for i in dict_move_p2 if dict_move_p2[i] == next_pos}
+            if key:
+                for i in key:
+                    dict_move_p2.pop(i)
+
     else:
-        print("\033[93m\nBlack's Turn\033[0m")
+        print("\033[93m\nYellow's Turn\033[0m")
         piece = input("\033[93m\nWhat piece would you like to move: \033[0m")
         if piece == "pawn":
             pawn = input("\033[93m\nWhich pawn (1 to 8) would you like to move: \033[0m")
@@ -307,7 +382,15 @@ while game:
 
         next_pos = (int(pos1), int(pos2))
 
-    if rules(piece, curr_pos, next_pos):
+        # true when there is NO piece
+        if check_jumping_p2(curr_pos, next_pos, next_turn):
+            # overtake as player_1
+            key = {i for i in dict_move_p1 if dict_move_p1[i] == next_pos}
+            if key:
+                for i in key:
+                    dict_move_p1.pop(i)
+
+    if rules(piece, curr_pos, next_pos, next_turn):
         if next_turn:
             dict_move_p1[piece] = next_pos
             next_turn = False
